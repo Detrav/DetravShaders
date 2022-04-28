@@ -1,0 +1,54 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+float plot(vec2 st, float pct){
+  return  smoothstep( pct-0.1, pct, st.y) -
+          smoothstep( pct, pct+0.1, st.y);
+}
+
+const float PI=3.14159265359;
+const float TWO_PI=6.28318530718;
+
+vec4 draw_arc(in vec2 point,
+              in float radius, in  vec2 center, in float start_angle,in  float end_angle, in float width,
+              in vec4 currentColor, in  vec4 color )
+{
+    point = center - point;
+    float r = length(point);
+    float a = mod( (atan(point.y,point.x) - start_angle) + TWO_PI * 2.5 , TWO_PI);
+    
+    end_angle -= start_angle;
+    
+    return mix(currentColor,  color , 
+            (1.0 - step(end_angle,a)) 
+               *
+            (step(radius - width/ 2.0,r)- step(radius + width / 2.0,r))
+              );
+    
+}
+
+vec4 circle_outline(vec2 pos,float width, float radius, vec2 center, vec4 current_color, vec4 stroke_color)
+{
+    vec2 tC = center-pos;
+    float r1 = radius * 2.0 - width /2.0;
+    float r2 = radius * 2.0 + width /2.0;
+    float dist = tC.x*tC.x+tC.y*tC.y;
+    return mix(current_color, stroke_color,
+        step(0.25*r1*r1, dist) - step(0.25*r2*r2, dist));
+}
+
+void fragment()
+{
+    vec2 st = UV;
+
+    
+    COLOR = vec4(0.0);
+    
+    COLOR = circle_outline(st, 0.02, 0.45, vec2(0.5), COLOR, vec4(1.0,0.0,0.0, 1.0));
+    COLOR = draw_arc(st, .45, vec2(0.5), 0.0 + TIME, PI /3.0  + TIME , 0.02, COLOR, vec4(1.0,1.0,0.0, 1.0));
+
+}"

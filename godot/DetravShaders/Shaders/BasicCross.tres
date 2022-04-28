@@ -1,0 +1,31 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+float box(in vec2 _st, in vec2 _size){
+    _size = vec2(0.5) - _size*0.5;
+    vec2 uv = smoothstep(_size,
+                        _size+vec2(0.001),
+                        _st);
+    uv *= smoothstep(_size,
+                    _size+vec2(0.001),
+                    vec2(1.0)-_st);
+    return uv.x*uv.y;
+}
+
+float cross2(in vec2 _st, in float _size){
+    return  box(_st, vec2(_size,_size/4.)) +
+            box(_st, vec2(_size/4.,_size));
+}
+
+void fragment(){
+    vec2 st = UV;
+	
+	COLOR = vec4(0.0);
+    
+    COLOR = mix( COLOR, vec4(1.0), cross2(st,0.5));
+}
+"

@@ -1,0 +1,111 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+const float PI=3.14159265359;
+const float TWO_PI=6.28318530718;
+
+
+const float ANGLE = PI*0.148;
+
+const int SIZE=3;
+
+float rand(vec2 co){
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+
+vec4 flower(vec2 center, vec2 pos, float angle,
+                    float size, vec4 current_color, vec4 color)
+{
+    vec2 location = center - pos;
+    float r = length(location)*2.0;
+    float a = (atan(location.y,location.x) - angle) / TWO_PI + 2.125 ;
+    
+    a = fract(a ) * TWO_PI;
+
+    if(a < PI) return current_color;
+    
+    float f = sin(a*2.0 )*size ;
+    
+    
+    float pct = 1.0-step(f,r);
+    return mix(current_color, color, pct);
+    
+}
+
+vec4 plaka(vec2 start, vec2 end, vec2 pos, vec4 currentColor, vec4 color)
+{
+    float f_step = distance(end,start) / float(SIZE + 1);
+    vec2 v_step = (end - start) * f_step;
+    vec2 center = start;
+    float f_angle = atan(v_step.y,v_step.x);
+    for(int i =0; i<= SIZE+2; i++)
+    {
+        currentColor = flower(center, pos, f_angle
+                - ANGLE
+                ,.5* f_step, currentColor, color);
+        currentColor = flower(center, pos, f_angle 
+                + ANGLE
+                ,0.5 * f_step, currentColor, color);
+        center += v_step;
+    }
+        
+    
+    return currentColor;
+}
+
+vec4 stvol(vec2 start, vec2 end, vec2 pos, vec4 currentColor, vec4 color)
+    {
+    float f_step = distance(end,start) / float(SIZE+1);
+    vec2 v_step = (end - start) * f_step;
+    float f_angle = atan(v_step.y,v_step.x);
+    vec2 left = vec2(cos(f_angle + ANGLE), sin(f_angle + ANGLE)) / 2.0;
+    vec2 right = vec2(cos(f_angle - ANGLE), sin(f_angle - ANGLE)) / 2.0;
+    vec2 center = start;
+    
+    
+    for(int i =0; i<= SIZE+1; i++)
+    {         
+        color = vec4(rand(center),rand(center+ left),rand(center+ right), 1.0);
+        currentColor = plaka(center, center + left, pos, currentColor, color);
+        currentColor = plaka(center, center + right, pos, currentColor, color );
+        center += v_step;
+    }
+    return currentColor;
+}
+
+vec4 stvol2(vec2 start, vec2 end, vec2 pos, vec4 currentColor, vec4 color)
+    {
+    float f_step = distance(end,start) / float(SIZE+1);
+    vec2 v_step = (end - start) * f_step;
+    float f_angle = atan(v_step.y,v_step.x);
+    vec2 left = vec2(cos(f_angle + ANGLE), sin(f_angle + ANGLE)) / 2.0;
+    vec2 right = vec2(cos(f_angle - ANGLE), sin(f_angle - ANGLE)) / 2.0;
+    vec2 center = start;
+    
+    
+    for(int i =0; i<= SIZE; i++)
+    {                    
+        color = vec4(rand(center),rand(center+ left),rand(center+ right), 1.0);
+        currentColor = stvol(center, center + left, pos, currentColor, color);
+        currentColor = stvol(center, center + right, pos, currentColor, color );
+        center += v_step;
+    }
+    return currentColor;
+}
+
+
+void fragment(){
+    vec2 st = UV;
+    COLOR = vec4(0.0);
+
+    vec2 pos = vec2(0.5)-st;
+    
+        COLOR = stvol2(vec2(0.1), vec2(0.9), st, COLOR, vec4(0.447,0.943,1.000, 1.0));
+
+}
+"

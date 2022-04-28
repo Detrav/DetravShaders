@@ -1,0 +1,34 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+vec4 circle(vec2 pos,float radius, vec2 center,
+             vec4 current_color, vec4 stroke_color)
+{
+	radius = radius * 2.0;
+    vec2 tC = center-pos;
+    return mix(current_color, stroke_color, 1.0 - step(0.25*radius*radius, tC.x*tC.x+tC.y*tC.y));
+}
+
+vec4 circle_outline(vec2 pos,float width, float radius, vec2 center, vec4 current_color, vec4 stroke_color)
+{
+	radius = radius * 2.0;
+    vec2 tC = center-pos;
+    float r1 = radius - width /2.0;
+    float r2 = radius + width /2.0;
+    float dist = tC.x*tC.x+tC.y*tC.y;
+    return mix(current_color, stroke_color,
+        step(0.25*r1*r1, dist) - step(0.25*r2*r2, dist));
+}
+
+void fragment(){
+	vec2 st = UV;
+    vec4 color = vec4(0.0);
+    color = circle(st, 0.25, vec2(0.25), color, vec4(1.0,0.0,0.0,1.0));
+    color = circle_outline(st,0.03, 0.25, vec2(0.75-0.03/2.0), color, vec4(0.0,1.0,0.0,1.0));
+
+	COLOR = color;
+}"

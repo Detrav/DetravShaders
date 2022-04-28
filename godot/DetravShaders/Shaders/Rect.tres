@@ -1,0 +1,22 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+vec4 rect(vec2 from, vec2 to, vec2 point, vec4 currentColor, vec4 color)
+{
+    vec2 bl = step(from,point);
+    float pct = bl.x * bl.y;
+    
+    vec2 tr = step(1.0-to,1.0-point); 
+    return mix(currentColor, color, bl.x * bl.y * tr.x * tr.y);
+}
+
+
+void fragment(){
+    vec2 st = UV;
+    COLOR = vec4(0.0);
+    COLOR = rect(vec2(0.1,0.1),vec2(0.5 + sin(TIME) * 0.2,0.5 + cos(TIME) * 0.2), st, COLOR, vec4(1.0));
+}"

@@ -1,0 +1,24 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+vec4 rect_outline(vec2 from, vec2 to, float width, vec2 pos, vec4 currentColor, vec4 color)
+{
+    vec2 bl = step(from-width/2.0,pos);
+    vec2 tr = step(1.0-to-width/2.0,1.0-pos); 
+    vec2 bl2 = step(from+width/2.0,pos);
+    vec2 tr2 = step(1.0-to+width/2.0,1.0-pos); 
+    
+    float ptc =  bl.x * bl.y * tr.x * tr.y - bl2.x * bl2.y * tr2.x * tr2.y;
+    return mix(currentColor, color,ptc);
+}
+
+
+void fragment(){
+    vec2 st = UV;
+    COLOR = vec4(0.0);
+    COLOR = rect_outline(vec2(0.1,0.1),vec2(0.5 + sin(TIME) * 0.2,0.5 + cos(TIME) * 0.2), 0.05, st, COLOR, vec4(1.0));
+}"

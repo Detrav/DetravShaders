@@ -1,0 +1,45 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+// 1.7320508 is sqrt(3)
+const vec2 s = vec2(1, 1.7320508);
+const vec3 foreground = vec3(0.5,0.0,0.5);
+const float scale = 5.0;
+const float aspect = 1.0;
+
+float hash21(vec2 p)
+{
+    return fract(sin(dot(p, vec2(141.13, 289.97)))*43758.5453);
+}
+
+float hex(in vec2 p)
+{    
+    p = abs(p);
+    return max(dot(p, s*.5), p.x); // Hexagon.
+}
+
+vec4 getHex(vec2 p)
+{    
+    
+    vec4 hC = floor(vec4(p, p - vec2(.5, 1))/s.xyxy) + .5;
+
+    vec4 h = vec4(p - hC.xy*s, p - (hC.zw + .5)*s);
+
+    return dot(h.xy, h.xy) < dot(h.zw, h.zw) 
+        ? vec4(h.xy, hC.xy) 
+        : vec4(h.zw, hC.zw + .5);
+}
+
+void fragment()
+{
+	vec3 color = COLOR.xyz;
+    vec4 h = getHex(vec2(UV.x * aspect * scale + TIME/2.0, UV.y * scale));
+    float eDist = hex(h.xy);
+    color = mix(color, foreground, smoothstep(0., .03, eDist - .5 + .04));    
+	
+	COLOR.xyz = color;
+}"

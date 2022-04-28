@@ -1,0 +1,44 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+const float PI=3.14159265359;
+const float TWO_PI=6.28318530718;
+
+vec4 flower_outline(vec2 center, vec2 pos, float angle,
+            float width, float min_radius, float max_radius,
+            float petal_count, vec4 current_color, vec4 color)
+{
+        vec2 location = center - pos;
+    float r = length(location)*2.0;
+    float a = atan(location.y,location.x) + angle;
+    
+    float dr = max_radius - min_radius;
+    
+    float f = pow(
+        //cos(a*petal_count/4.) +
+        sin(a*petal_count/8.)
+        ,2.) * dr + min_radius;
+    
+    
+    float pct = step(f-width/2.0,r) - step(f+width/2.0,r);
+    return mix(current_color, color, pct);
+    
+}
+
+void fragment(){
+    vec2 st = UV;
+    COLOR = vec4(0.0);
+
+    vec2 pos = vec2(0.5)-st;
+    
+    for(int i =0 ; i<4; i++)
+	{
+		COLOR = flower_outline(vec2(0.5), st, TIME + float(i)*TWO_PI, 0.03, 0.2, 0.8,5.0, COLOR, vec4(0.020,1.000,0.990, 1.0));
+    }
+
+}
+"

@@ -1,0 +1,46 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://Scenes/MainScene.cs" type="Script" id=1]
+[ext_resource path="res://Scenes/ShaderItem.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Shaders/GridAnimationShader.tres" type="Shader" id=3]
+[ext_resource path="res://Shaders/BasicArcShader.tres" type="Shader" id=4]
+[ext_resource path="res://Scenes/DefaultTheme.tres" type="Theme" id=5]
+[ext_resource path="res://Shaders/GridShader.tres" type="Shader" id=6]
+[ext_resource path="res://Shaders/BasicCircle.tres" type="Shader" id=7]
+[ext_resource path="res://Shaders/BasicCross.tres" type="Shader" id=8]
+[ext_resource path="res://Shaders/Flower.tres" type="Shader" id=9]
+[ext_resource path="res://Shaders/FlowerOutline.tres" type="Shader" id=10]
+[ext_resource path="res://Shaders/PolarCoordinateSystem.tres" type="Shader" id=11]
+[ext_resource path="res://Shaders/Rect.tres" type="Shader" id=12]
+[ext_resource path="res://Shaders/RectOutline.tres" type="Shader" id=13]
+[ext_resource path="res://Shaders/RectOutlineRotation.tres" type="Shader" id=14]
+[ext_resource path="res://Shaders/FlagLgbt.tres" type="Shader" id=15]
+[ext_resource path="res://Shaders/PaintFlower.tres" type="Shader" id=16]
+[ext_resource path="res://Shaders/PaintFlower2.tres" type="Shader" id=17]
+[ext_resource path="res://Shaders/PaintFlower3.tres" type="Shader" id=18]
+[ext_resource path="res://Shaders/PaintPitMondrian.tres" type="Shader" id=19]
+[ext_resource path="res://Shaders/PaintRadar.tres" type="Shader" id=20]
+[ext_resource path="res://Shaders/TransfromAll.tres" type="Shader" id=21]
+[ext_resource path="res://Shaders/Hexagons.tres" type="Shader" id=22]
+
+[node name="MainScene" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 5 )
+script = ExtResource( 1 )
+ShaderMaterials = [ ExtResource( 6 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ) ]
+ShaderItem = ExtResource( 2 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+scroll_horizontal_enabled = false
+scroll_vertical = 3761
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+margin_top = -3761.0
+margin_right = 1880.0
+margin_bottom = 1080.0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 10
+columns = 3

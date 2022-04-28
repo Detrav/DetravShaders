@@ -1,0 +1,35 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+vec4 flower(vec2 center, vec2 pos, float angle,
+            float min_radius, float max_radius,
+            float petal_count, vec4 current_color, vec4 color)
+{
+    vec2 location = center - pos;
+    float r = length(location)*2.0;
+    float a = atan(location.y,location.x) + angle;
+    
+    float dr = max_radius - min_radius;
+    
+    float f = pow(cos(a*petal_count/2.0),2.) * dr + min_radius;
+    
+    
+    
+    return mix(current_color, color, 1.-step(f,r));
+    
+}
+
+void fragment(){
+    vec2 st = UV;
+    COLOR = vec4(0.0);
+
+    vec2 pos = vec2(0.5)-st;
+
+    COLOR = flower(vec2(0.5), st, TIME, 0.2, 0.8,5.0, COLOR, vec4(0.020,1.000,0.990, 1.0));
+
+}
+"
