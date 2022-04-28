@@ -35,12 +35,14 @@ ShaderItem = ExtResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 scroll_horizontal_enabled = false
-scroll_vertical = 3761
+scroll_vertical = 2693
 
 [node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
-margin_top = -3761.0
-margin_right = 1880.0
-margin_bottom = 1080.0
+margin_top = -2693.0
+margin_right = 1268.0
+margin_bottom = 720.0
 custom_constants/vseparation = 10
 custom_constants/hseparation = 10
 columns = 3
+
+[connection signal="resized" from="." to="." method="_on_MainScene_resized"]
