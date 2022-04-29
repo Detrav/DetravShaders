@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=2]
+
+[ext_resource path="res://Materials/GalaxyMaterial/GalaxyShader.tres" type="Shader" id=1]
+[ext_resource path="res://Materials/GalaxyMaterial/GalaxyTexture.jpg" type="Texture" id=2]
+
+[sub_resource type="OpenSimplexNoise" id=1]
+period = 16.0
+
+[sub_resource type="NoiseTexture" id=2]
+seamless = true
+noise = SubResource( 1 )
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/u_Texture = ExtResource( 2 )
+shader_param/u_Noise = SubResource( 2 )

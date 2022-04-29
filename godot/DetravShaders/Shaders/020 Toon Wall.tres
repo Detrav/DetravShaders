@@ -1,0 +1,72 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,
+                         vec2(12.9898,78.233)))*
+        43758.5453123);
+}
+
+float rand(vec2 c)
+{
+    return mix(.2, .7, random(c));
+}
+
+void fragment( )
+{
+    vec2 uv = UV * 10.0;
+    
+    uv.x += TIME / 2.;
+    //uv.y -= iMouse.y / iResolution.y * 10.;
+
+    float f[2] = float[2](fract(uv.x), fract(uv.y));
+    vec2 c = floor(uv);
+    
+    float texCoord[2] = float[2](f[0], f[1]);
+    float tileCoord[2] = float[2](c[0], c[1]);
+    
+    float r0 = rand(floor(uv));
+    
+    int orientation = (int(c.x) + int(c.y)) & 1;
+
+    
+    if(f[orientation] > r0)
+        tileCoord[orientation] += 1.;
+
+    texCoord[orientation] = abs(texCoord[orientation] - r0);
+
+    float cellOffset[2] = float[2](0.0,0.0);
+    
+    cellOffset[orientation] = (f[orientation] > r0) ? +1. : -1.;
+    
+    float r1 = rand(vec2( c[0] + cellOffset[0], c[1] + cellOffset[1]));
+    
+    if(f[orientation ^ 1] > r1)
+        tileCoord[orientation ^ 1] += 1.;
+    
+    texCoord[orientation ^ 1] = abs(texCoord[orientation ^ 1] - r1);
+    
+    
+    // Shading and colouration.
+    
+    
+    // Rounded box shape.
+    float mask = 1. - smoothstep(0., .01, distance(vec2(.1), min(vec2(texCoord[0],texCoord[1]), 0.1)) - .05);
+    
+    // Corner 'bolts' shape.
+    mask *= smoothstep(.05, .06, distance(vec2(.15), vec2(texCoord[0],texCoord[1])));
+    
+    // Randomised per-tile colour.
+    vec3 colour = .52 + .48 * cos(rand(vec2(tileCoord[0],tileCoord[1])) * vec3(4, 2, 6) * 4.5 + 18.5);
+    
+    // Combine.
+    vec3 col = mix(vec3(.02), colour, mask);
+    
+    // Output.
+    COLOR = vec4(pow(col, vec3(1. / 2.2)), 1.0);
+}
+"

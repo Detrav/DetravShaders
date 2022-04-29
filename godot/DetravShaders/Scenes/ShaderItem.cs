@@ -7,17 +7,24 @@ public class ShaderItem : VBoxContainer
     private ColorRect colorRect;
     private Label label;
     [Export]
-    public Shader ItemShader { get; set; }
+    public Resource ItemShader { get; set; }
 
     private float lastWidth = 0;
 
     public override void _Ready()
     {
         colorRect = GetNode<ColorRect>("ColorRect");
-        colorRect.Material = new ShaderMaterial()
+        if (ItemShader is Shader shader)
         {
-            Shader = ItemShader
-        };
+            colorRect.Material = new ShaderMaterial()
+            {
+                Shader = shader
+            };
+        }
+        else if (ItemShader is Material material)
+        {
+            colorRect.Material = material;
+        }
         label = GetNode<Label>("Label");
         label.Text = System.IO.Path.GetFileNameWithoutExtension(ItemShader?.ResourcePath ?? "None");
     }

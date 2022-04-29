@@ -1,0 +1,33 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+const vec4 color_grid =  vec4(0.0,0.0,0.0,1.0);
+const vec4 color_back =  vec4(1.0,1.0,1.0,1.0);
+const float grid_width = 0.1;
+const float grid_count = 5.0;
+const float grid_count_size = grid_count + grid_width;
+
+mat2 rotate2d(float _angle){
+    return mat2(vec2(cos(_angle),-sin(_angle)),
+                vec2(sin(_angle),cos(_angle)));
+}
+
+void fragment() {
+	
+	
+	vec2 st = UV;
+	st -= vec2(0.5);
+	st *= grid_count_size;
+	st = rotate2d(TIME * 0.3) * st;
+	
+	st = fract(st);
+	
+	COLOR = color_back;
+	COLOR = mix(COLOR, color_grid, 1.0 - step(grid_width, st.x ));
+	COLOR = mix(COLOR, color_grid, 1.0 - step(grid_width, st.y ));
+	
+}"
