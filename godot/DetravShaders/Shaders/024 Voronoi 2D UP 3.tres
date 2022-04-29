@@ -21,14 +21,20 @@ vec3 hash(vec3 p) {
                43758.5453);
 }
 
+vec2 random(vec2 point)
+{
+	const float speed = 2.0;
+	 return vec2( cos(TIME * point.x * speed), sin(TIME * point.y * speed) ) * 0.5 + 0.5;
+}
+
 float voronoi2d(in vec2 point) {
-  vec2 p = floor(point);
+  vec2 p = floor(point) ;
   vec2 f = fract(point);
   float res = 0.0;
   for (int j = -1; j <= 1; j++) {
     for (int i = -1; i <= 1; i++) {
       vec2 b = vec2(float(i), float(j));
-      vec2 r = vec2(b ) - f + rhash(p + b) ;
+      vec2 r = vec2(b ) - f + random(rhash(p + b)) ;
       res += 1. / pow(dot(r, r), 8.);
     }
   }
@@ -37,6 +43,6 @@ float voronoi2d(in vec2 point) {
 
 void fragment( )
 {
-    COLOR.rgb = vec3(1.0) * voronoi2d(UV *10.0); 
+    COLOR.rgb = vec3(1.0) * voronoi2d(UV *5.0); 
 }
 "
