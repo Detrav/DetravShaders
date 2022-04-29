@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 [Tool]
 public class MainScene : Control
@@ -28,7 +29,9 @@ public class MainScene : Control
             materials.Add(ResourceLoader.Load(material));
         }
 
-        this.materials = materials.ToArray();
+        
+
+        this.materials = materials.OrderBy(m => System.IO.Path.GetFileNameWithoutExtension(m?.ResourcePath ?? "None")).ToArray();
 
         grid = GetNode<GridContainer>("ScrollContainer/GridContainer");
         UpdateMaterials();
