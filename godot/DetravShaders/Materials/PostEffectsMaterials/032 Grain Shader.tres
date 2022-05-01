@@ -1,0 +1,26 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+uniform sampler2D u_Texture;
+uniform float u_Step;
+
+vec4 grain(vec2 uv){
+
+    // Calculate noise and sample texture
+    float mdf = 0.2; // increase for noise amount 
+	vec2 noise_pos = floor(uv / u_Step) * u_Step;
+    float noise = (fract(sin(dot(noise_pos, vec2(12.9898,78.233)*2.0)) * 43758.5453));
+    vec4 tex = texture(u_Texture, uv);
+    
+    mdf *= sin(TIME) + 1.0; // animate the effect's strength
+    
+    return tex - noise * mdf;
+ }
+
+void fragment() {
+	COLOR = grain(UV);
+}"

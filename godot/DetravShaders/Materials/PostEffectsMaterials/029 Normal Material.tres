@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://Materials/PostEffectsMaterials/029 Normal Shader.tres" type="Shader" id=1]
+[ext_resource path="res://Materials/PostEffectsMaterials/photo_2022-05-01_12-01-15.jpg" type="Texture" id=2]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/u_Texture = ExtResource( 2 )

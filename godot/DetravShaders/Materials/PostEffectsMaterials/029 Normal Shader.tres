@@ -1,0 +1,13 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+uniform sampler2D u_Texture;
+
+void fragment() {
+	COLOR = texture(u_Texture, UV);	
+	//COLOR = texture(u_Texture, vec2(TEXTURE_PIXEL_SIZE.x * UV.x,TEXTURE_PIXEL_SIZE.y * UV.y ));	
+}"
