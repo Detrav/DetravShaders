@@ -1,0 +1,35 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "//https://docs.godotengine.org/ru/stable/tutorials/shaders/index.html
+//https://docs.godotengine.org/ru/stable/tutorials/shaders/shader_reference/canvas_item_shader.html
+shader_type canvas_item;
+
+uniform sampler2D u_Texture;
+uniform float u_Step;
+
+vec4 grain(vec2 uv){
+
+    float seperation = 0.01;
+    float sinWave = sin(TIME) * seperation;
+    float cosWave = cos(TIME) * seperation;
+    
+    vec2 clockwise = vec2(sinWave, cosWave);
+    vec2 anticlockwise = vec2(-sinWave, cosWave);
+    float speed = 1.0;
+    
+    vec2 offsetRed = clockwise;
+	vec2 offsetGreen = anticlockwise;
+	vec2 offsetBlue = vec2(1,1) * cosWave;
+   
+    
+    vec4 red = texture(u_Texture, uv-offsetRed);
+    vec4 green = texture(u_Texture, uv-offsetGreen);
+    vec4 blue = texture(u_Texture, uv-offsetBlue);
+	
+	return vec4(red.r, green.g, blue.b, 1.0);
+ }
+
+void fragment() {
+	COLOR = grain(UV);
+}"
